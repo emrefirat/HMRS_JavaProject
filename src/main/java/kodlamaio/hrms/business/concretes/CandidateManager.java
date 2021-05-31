@@ -28,7 +28,6 @@ public class CandidateManager implements CandidateService {
 
     @Override
     public Result add(Candidate candidate) {
-        if (!candidate.getFirstName().isEmpty())
         candidateDao.save(candidate);
         return new SuccessResult("Kullanıcı eklendi");
     }
