@@ -1,6 +1,7 @@
 package kodlamaio.hrms.api.controllers;
 
 import kodlamaio.hrms.business.abstracts.JobTitleService;
+import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.entities.concretes.JobTitle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class JobTitlesController {
 
 
     @GetMapping("/getall")
-    public List<JobTitle> getAll(){
+    public DataResult<List<JobTitle>> getAll(){
         return this.jobTitleService.getAll();
     }
 }
