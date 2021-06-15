@@ -5,7 +5,9 @@ import kodlamaio.hrms.business.abstracts.CandidateService;
 import kodlamaio.hrms.business.abstracts.EmployerService;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
+import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.CandidateDao;
+import kodlamaio.hrms.dataAccess.abstracts.EmployerDao;
 import kodlamaio.hrms.entities.concretes.Candidate;
 import kodlamaio.hrms.entities.concretes.Employer;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,14 @@ public class AuthManager implements AuthService {
     private CandidateService candidateService;
     private EmployerService employerService;
     private CandidateDao candidateDao;
-    public AuthManager(CandidateService candidateService, EmployerService employerService) {
+    private EmployerDao employerDao;
+
+    public AuthManager(CandidateService candidateService, EmployerService employerService,
+                       CandidateDao candidateDao,EmployerDao employerDao) {
         this.candidateService = candidateService;
         this.employerService = employerService;
+        this.candidateDao = candidateDao;
+        this.employerDao = employerDao;
 
     }
 
@@ -36,18 +43,33 @@ public class AuthManager implements AuthService {
                 passwordRepeat.isEmpty()){
             return new ErrorResult("Tum alanlar zorunludur.");
         }
-        if(this.candidateDao.getByEmail(candidate.getEmail()) != null){
-            return new ErrorResult("Bu eposta adresine sahip bir hesap zaten var.");
+        if (this.checkIfEmailAlreadyExists(candidate).isSuccess()){
+            return new ErrorResult("An candidate have a this email address already exists");
+        }
+        if (this.checkIfNationalIdAlreadyExists(candidate).isSuccess()){
+            return new ErrorResult("An candidate have a this national Id already exists");
         }
 
-
-
-        return null;
+        return new SuccessResult();
     }
 
     @Override
     public Result registerForEmployer(Employer employer, String passwordRepeat) {
-        return null;
+        if (!checkPasswordRepeat(employer.getPassword(),passwordRepeat)){
+            return new ErrorResult("Parolalar Eslesmiyor");
+        }
+
+        if (employer.getCompanyName().isEmpty() ||
+                employer.getWebAddress().isEmpty() ||
+                employer.getPhoneNumber().isEmpty() ||
+                employer.getPassword().isEmpty() ) {return new ErrorResult("Tum alanlar zorunludur");
+        }
+
+        if (employerDao.existsByEmail(employer.getEmail())){
+            return new ErrorResult("This email address already exists for the another employer");
+        }
+
+        return new SuccessResult();
     }
 
 
@@ -58,6 +80,20 @@ public class AuthManager implements AuthService {
         return false;
     }
 
+    private Result checkIfNationalIdAlreadyExists(Candidate candidate) {
+        boolean result = this.candidateDao.existsByNationalityId(candidate.getNationalityId());
+        if (result){
+            new ErrorResult();
+        }
+        return new SuccessResult();
+    }
+    private Result checkIfEmailAlreadyExists(Candidate candidate) {
+        boolean result = this.candidateDao.existsByEmail(candidate.getEmail());
+        if (result){
+            new ErrorResult();
+        }
+        return new SuccessResult();
+    }
 
 
 }

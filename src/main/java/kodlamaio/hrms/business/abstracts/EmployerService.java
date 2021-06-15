@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface EmployerService {
     DataResult<List<Employer>> getAll();
-    Result register(Employer employer);
+    Result add(Employer employer);
 }

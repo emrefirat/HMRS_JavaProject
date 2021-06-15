@@ -10,6 +10,8 @@ import kodlamaio.hrms.entities.concretes.Candidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -27,8 +29,11 @@ public class CandidateManager implements CandidateService {
     }
 
     @Override
-    public Result add(Candidate candidate) {
+    public DataResult<Candidate> add(Candidate candidate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(candidate.getDateOfBirth().toString(), formatter);
+        candidate.setDateOfBirth(localDate);
         candidateDao.save(candidate);
-        return new SuccessResult("Kullanıcı eklendi");
+        return new SuccessDataResult<Candidate>(candidate,"Kullanıcı eklendi");
     }
 }

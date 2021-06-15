@@ -21,7 +21,7 @@ public class EmployerManager implements EmployerService {
     }
 
     @Override
-    public Result register(Employer employer) {
+    public Result add(Employer employer) {
         return null;
     }
 
