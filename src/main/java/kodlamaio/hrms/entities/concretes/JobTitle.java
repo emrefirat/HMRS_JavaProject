@@ -1,10 +1,12 @@
 package kodlamaio.hrms.entities.concretes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,5 +21,9 @@ public class JobTitle {
 
     @Column(name="name")
     private String name;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "jobTitle")
+    private List<JobAdvertisement> jobAdvertisements;
 }
 
