@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface JobAdvertisementDao extends JpaRepository<JobAdvertisement,Integer> {
 
@@ -18,6 +19,7 @@ public interface JobAdvertisementDao extends JpaRepository<JobAdvertisement,Inte
     @Query("update JobAdvertisement j set j.isActive = false where j.id = :id")
     void setDeactivateJobAdvertisement(int id);
 
+    Optional<JobAdvertisement> getJobAdvertisementById(Integer id);
 
 
 

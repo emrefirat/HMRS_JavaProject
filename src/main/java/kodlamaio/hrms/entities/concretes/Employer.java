@@ -16,10 +16,14 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "employers")
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler","jobAdvertisements"})
-@EqualsAndHashCode(callSuper = true)
-@PrimaryKeyJoinColumn(name="user_id",referencedColumnName = "id")
 
-public class Employer  extends User{
+public class Employer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private int id;
+
+
     @Column(name = "company_name")
     private String companyName;
 
@@ -30,7 +34,11 @@ public class Employer  extends User{
     private String phoneNumber;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "employer")
+    @OneToMany(cascade =CascadeType.PERSIST, mappedBy = "employer",fetch = FetchType.EAGER)
     private List<JobAdvertisement> jobAdvertisements;
 
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id",referencedColumnName = "id", unique = true)
+    private User user;
 }

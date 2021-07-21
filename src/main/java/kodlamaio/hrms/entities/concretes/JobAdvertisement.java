@@ -49,11 +49,11 @@ public class JobAdvertisement {
 
     @ManyToOne()
     @JsonIgnoreProperties({"website","phone","password","email"})
-    @JoinColumn(name = "employer_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "employer_id", referencedColumnName = "id")
     private Employer employer;
 
     @ManyToOne()
-    @JoinColumn(name = "job_title_id")
+    @JoinColumn(name = "job_title_id", referencedColumnName = "id")
     private JobTitle jobTitle;
 
 

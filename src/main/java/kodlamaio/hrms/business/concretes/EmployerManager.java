@@ -4,6 +4,7 @@ import kodlamaio.hrms.business.abstracts.EmployerService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
+import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.EmployerDao;
 import kodlamaio.hrms.entities.concretes.Employer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,10 @@ public class EmployerManager implements EmployerService {
 
     @Override
     public Result add(Employer employer) {
-        return null;
+        this.employerDao.save(employer);
+        return new SuccessResult("Musteri eklendi.");
+
+
     }
 
     @Override

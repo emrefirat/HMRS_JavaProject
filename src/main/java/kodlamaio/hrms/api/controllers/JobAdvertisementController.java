@@ -1,9 +1,7 @@
 package kodlamaio.hrms.api.controllers;
 
 import kodlamaio.hrms.business.abstracts.JobAdvertisementService;
-import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.core.utilities.results.Result;
-import kodlamaio.hrms.core.utilities.results.SuccessResult;
+import kodlamaio.hrms.core.utilities.results.*;
 import kodlamaio.hrms.entities.concretes.Candidate;
 import kodlamaio.hrms.entities.concretes.Employer;
 import kodlamaio.hrms.entities.concretes.JobAdvertisement;
@@ -39,9 +37,25 @@ public class JobAdvertisementController {
         return this.jobAdvertisementService.getByIsActiveTrueAndEmployer_Id(id);
     }
 
-    @PostMapping("/setDeactivateJobAdvertisement")
-    SuccessResult setDeactivateJobAdvertisement(@RequestParam int id){
-        this.jobAdvertisementService.setDeactivateJobAdvertisement(id);
-        return new SuccessResult();
+    @GetMapping("/getById")
+    Result getById(@RequestParam int id){
+        return this.jobAdvertisementService.getById(id);
+
     }
+    @PostMapping("/setDeactivateJobAdvertisement")
+    Result setDeactivateJobAdvertisement(@RequestParam int id){
+        var result = this.jobAdvertisementService.setDeactivateJobAdvertisement(id).isSuccess();
+        var message = this.jobAdvertisementService.setDeactivateJobAdvertisement(id).getMessage();
+        if (result){
+            return new SuccessResult(message);
+        }
+        return new ErrorResult(message);
+
+    }
+    @PostMapping("/setActivateJobAdvertisement")
+    Result setActivateJobAdvertisement(@RequestParam int id){
+        return this.jobAdvertisementService.setActivateJobAdvertisement(id);
+
+    }
+
 }

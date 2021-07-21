@@ -55,17 +55,17 @@ public class AuthManager implements AuthService {
 
     @Override
     public Result registerForEmployer(Employer employer, String passwordRepeat) {
-        if (!checkPasswordRepeat(employer.getPassword(),passwordRepeat)){
+        if (!checkPasswordRepeat(employer.getUser().getPassword(),passwordRepeat)){
             return new ErrorResult("Parolalar Eslesmiyor");
         }
 
         if (employer.getCompanyName().isEmpty() ||
                 employer.getWebAddress().isEmpty() ||
                 employer.getPhoneNumber().isEmpty() ||
-                employer.getPassword().isEmpty() ) {return new ErrorResult("Tum alanlar zorunludur");
+                employer.getUser().getPassword().isEmpty() ) {return new ErrorResult("Tum alanlar zorunludur");
         }
 
-        if (employerDao.existsByEmail(employer.getEmail())){
+        if (employerDao.existsByUser_Email(employer.getUser().getEmail())){
             return new ErrorResult("This email address already exists for the another employer");
         }
 
