@@ -3,6 +3,7 @@ package kodlamaio.hrms.business.concretes;
 import kodlamaio.hrms.business.abstracts.AuthService;
 import kodlamaio.hrms.business.abstracts.CandidateService;
 import kodlamaio.hrms.business.abstracts.EmployerService;
+import kodlamaio.hrms.core.utilities.adapters.MernisAdapter;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
@@ -19,13 +20,15 @@ public class AuthManager implements AuthService {
     private EmployerService employerService;
     private CandidateDao candidateDao;
     private EmployerDao employerDao;
+    private MernisAdapter mernisAdapter;
 
     public AuthManager(CandidateService candidateService, EmployerService employerService,
-                       CandidateDao candidateDao,EmployerDao employerDao) {
+                       CandidateDao candidateDao, EmployerDao employerDao, MernisAdapter mernisAdapter) {
         this.candidateService = candidateService;
         this.employerService = employerService;
         this.candidateDao = candidateDao;
         this.employerDao = employerDao;
+        this.mernisAdapter = mernisAdapter;
 
     }
 
@@ -43,32 +46,37 @@ public class AuthManager implements AuthService {
                 passwordRepeat.isEmpty()){
             return new ErrorResult("Tum alanlar zorunludur.");
         }
-        if (this.checkIfEmailAlreadyExists(candidate).isSuccess()){
-            return new ErrorResult("An candidate have a this email address already exists");
-        }
         if (this.checkIfNationalIdAlreadyExists(candidate).isSuccess()){
             return new ErrorResult("An candidate have a this national Id already exists");
         }
-
+        if (this.checkIfEmailAlreadyExists(candidate).isSuccess()){
+            return new ErrorResult("An candidate have a this email address already exists");
+        }
+        if (!this.mernisAdapter.isValid(candidate).isSuccess()){
+            return new ErrorResult("Could not verify from this Mernis");
+        }
         return new SuccessResult();
     }
 
     @Override
     public Result registerForEmployer(Employer employer, String passwordRepeat) {
-        if (!checkPasswordRepeat(employer.getUser().getPassword(),passwordRepeat)){
+        if (!checkPasswordRepeat(employer.getPassword(),passwordRepeat)){
             return new ErrorResult("Parolalar Eslesmiyor");
         }
 
         if (employer.getCompanyName().isEmpty() ||
                 employer.getWebAddress().isEmpty() ||
                 employer.getPhoneNumber().isEmpty() ||
-                employer.getUser().getPassword().isEmpty() ) {return new ErrorResult("Tum alanlar zorunludur");
+                employer.getEmail().isEmpty() ||
+                employer.getPassword().isEmpty() ) {return new ErrorResult("Tum alanlar zorunludur");
         }
 
-        if (employerDao.existsByUser_Email(employer.getUser().getEmail())){
+        if (employerDao.existsByEmail(employer.getEmail())){
             return new ErrorResult("This email address already exists for the another employer");
         }
-
+        if (!this.IsCheckEmailAddressEndingAsWebsite(employer).isSuccess()){
+            return new ErrorResult("Email and website don't match.");
+        }
         return new SuccessResult();
     }
 
@@ -83,16 +91,24 @@ public class AuthManager implements AuthService {
     private Result checkIfNationalIdAlreadyExists(Candidate candidate) {
         boolean result = this.candidateDao.existsByNationalityId(candidate.getNationalityId());
         if (result){
-            new ErrorResult();
+            return new SuccessResult();
         }
-        return new SuccessResult();
+        return new ErrorResult();
     }
     private Result checkIfEmailAlreadyExists(Candidate candidate) {
         boolean result = this.candidateDao.existsByEmail(candidate.getEmail());
         if (result){
-            new ErrorResult();
+            return new SuccessResult();
         }
-        return new SuccessResult();
+        return new ErrorResult();
+    }
+    private Result IsCheckEmailAddressEndingAsWebsite(Employer employer){
+        String[] parsedData = employer.getEmail().split("@");
+        System.out.println(parsedData[1]);
+        if (employer.getWebAddress().endsWith(parsedData[1])){
+            return new SuccessResult();
+        }
+        return new ErrorResult();
     }
 
 

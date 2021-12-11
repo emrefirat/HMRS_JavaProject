@@ -7,6 +7,7 @@ import kodlamaio.hrms.entities.concretes.Employer;
 import kodlamaio.hrms.entities.concretes.JobAdvertisement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,8 +39,8 @@ public class JobAdvertisementController {
     }
 
     @GetMapping("/getById")
-    Result getById(@RequestParam int id){
-        return this.jobAdvertisementService.getById(id);
+    ResponseEntity<?> getById(@RequestParam int id){
+        return ResponseEntity.ok(this.jobAdvertisementService.getById(id));
 
     }
     @PostMapping("/setDeactivateJobAdvertisement")

@@ -2,12 +2,15 @@ package kodlamaio.hrms.entities.concretes;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Data
@@ -15,8 +18,13 @@ import java.time.LocalDate;
 @Table(name = "candidates")
 @AllArgsConstructor
 @NoArgsConstructor
-@PrimaryKeyJoinColumn(name="user_id",referencedColumnName = "id")
-public class Candidate extends User {
+
+public class Candidate {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -30,6 +38,24 @@ public class Candidate extends User {
     @Column(name = "date_of_birth")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
+    @ApiModelProperty(hidden = true) //Api'de gizler
+    @Column(name = "is_active", columnDefinition = "boolean default false")
+    private Boolean isActive = false;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "candidate")
+    private List<ResumeEducation> resumeEducations;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "candidate",cascade=CascadeType.ALL)
+    private List<ResumeExperience> resumeExperiences;
 
 }
 

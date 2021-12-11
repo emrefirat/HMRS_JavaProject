@@ -25,9 +25,11 @@ public class CandidatesController {
     public DataResult<List<Candidate>> getAll(){
         return this.candidateService.getAll();
     }
+
     @PostMapping("/add")
     public Result add(@RequestBody Candidate candidate){
-        return this.candidateService.add(candidate);
+        String repeatPassword = "Parola.123";
+        return this.candidateService.add(candidate,repeatPassword);
     }
 
 }

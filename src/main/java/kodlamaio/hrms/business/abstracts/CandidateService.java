@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface CandidateService {
     DataResult<List<Candidate>> getAll();
-    DataResult<Candidate> add(Candidate candidate);
+    DataResult<Candidate> add(Candidate candidate,String repeatPassword);
 }
