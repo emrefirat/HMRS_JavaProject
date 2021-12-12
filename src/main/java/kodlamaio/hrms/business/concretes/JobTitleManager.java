@@ -1,8 +1,7 @@
 package kodlamaio.hrms.business.concretes;
 
 import kodlamaio.hrms.business.abstracts.JobTitleService;
-import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
+import kodlamaio.hrms.core.utilities.results.*;
 import kodlamaio.hrms.dataAccess.abstracts.JobTitleDao;
 import kodlamaio.hrms.entities.concretes.JobTitle;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +22,12 @@ public class JobTitleManager implements JobTitleService {
     @Override
     public DataResult<List<JobTitle>> getAll() {
         return new SuccessDataResult<List<JobTitle>>(this.jobTitleDao.findAll(),"Job Titles are listed.");
+    }
+    public Result add(JobTitle jobTitle){
+       if (this.jobTitleDao.existsByName(jobTitle.getName())){
+           return new ErrorResult("Position already exist");
+        }
+       this.jobTitleDao.save(jobTitle);
+        return new SuccessResult("Position added successfully");
     }
 }

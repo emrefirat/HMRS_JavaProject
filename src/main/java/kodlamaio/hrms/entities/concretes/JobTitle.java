@@ -1,6 +1,7 @@
 package kodlamaio.hrms.entities.concretes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class JobTitle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
+    @ApiModelProperty(hidden = true)
     private int id;
 
     @Column(name="name")

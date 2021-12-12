@@ -1,6 +1,6 @@
 package kodlamaio.hrms.business.concretes;
 
-import kodlamaio.hrms.business.abstracts.AuthService;
+import kodlamaio.hrms.business.abstracts.ControlService;
 import kodlamaio.hrms.business.abstracts.CandidateService;
 import kodlamaio.hrms.core.utilities.results.*;
 import kodlamaio.hrms.dataAccess.abstracts.CandidateDao;
@@ -17,12 +17,12 @@ import java.util.List;
 @Service
 public class CandidateManager implements CandidateService {
     private CandidateDao candidateDao;
-    private AuthService authService;
+    private ControlService controlService;
 
     @Autowired
-    public CandidateManager(CandidateDao candidateDao, @Lazy AuthService authService) {
+    public CandidateManager(CandidateDao candidateDao, @Lazy ControlService controlService) {
         this.candidateDao = candidateDao;
-        this.authService = authService;
+        this.controlService = controlService;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CandidateManager implements CandidateService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(candidate.getDateOfBirth().toString(), formatter);
         candidate.setDateOfBirth(localDate);
-        Result regResult = this.authService.registerForCandidate(candidate,repeatPassword);
+        Result regResult = this.controlService.registerForCandidate(candidate,repeatPassword);
         if(regResult.isSuccess()){
             String randomCode = RandomString.make(8);
             //user.setVerificationCode(randomCode);

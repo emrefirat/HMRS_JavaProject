@@ -1,6 +1,6 @@
 package kodlamaio.hrms.business.concretes;
 
-import kodlamaio.hrms.business.abstracts.AuthService;
+import kodlamaio.hrms.business.abstracts.ControlService;
 import kodlamaio.hrms.business.abstracts.CandidateService;
 import kodlamaio.hrms.business.abstracts.EmployerService;
 import kodlamaio.hrms.core.utilities.adapters.MernisAdapter;
@@ -15,15 +15,15 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class AuthManager implements AuthService {
+public class ControlManager implements ControlService {
     private CandidateService candidateService;
     private EmployerService employerService;
     private CandidateDao candidateDao;
     private EmployerDao employerDao;
     private MernisAdapter mernisAdapter;
 
-    public AuthManager(CandidateService candidateService, EmployerService employerService,
-                       CandidateDao candidateDao, EmployerDao employerDao, MernisAdapter mernisAdapter) {
+    public ControlManager(CandidateService candidateService, EmployerService employerService,
+                          CandidateDao candidateDao, EmployerDao employerDao, MernisAdapter mernisAdapter) {
         this.candidateService = candidateService;
         this.employerService = employerService;
         this.candidateDao = candidateDao;
