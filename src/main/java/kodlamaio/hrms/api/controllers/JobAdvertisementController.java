@@ -5,6 +5,7 @@ import kodlamaio.hrms.core.utilities.results.*;
 import kodlamaio.hrms.entities.concretes.Candidate;
 import kodlamaio.hrms.entities.concretes.Employer;
 import kodlamaio.hrms.entities.concretes.JobAdvertisement;
+import kodlamaio.hrms.entities.dtos.JobAdvertisementDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +58,15 @@ public class JobAdvertisementController {
     Result setActivateJobAdvertisement(@RequestParam int id){
         return this.jobAdvertisementService.setActivateJobAdvertisement(id);
 
+    }
+    @GetMapping("/getJobAdvertisementsIsActive")
+    DataResult<List<JobAdvertisementDto>> getIsActiveDto(){
+        return this.jobAdvertisementService.getJobAdvertisementsIsActive();
+    }
+
+    @PostMapping("/getJobAdvertisementsDtoIsActiveByCompanyName")
+    DataResult<List<JobAdvertisementDto>> getJobAdvertisementsDtoIsActiveByCompanyName(@RequestParam String companyName){
+        return this.jobAdvertisementService.getJobAdvertisementsDtoIsActiveByCompanyName(companyName);
     }
 
 }

@@ -7,6 +7,7 @@ import kodlamaio.hrms.dataAccess.abstracts.JobAdvertisementDao;
 import kodlamaio.hrms.entities.concretes.City;
 import kodlamaio.hrms.entities.concretes.Employer;
 import kodlamaio.hrms.entities.concretes.JobAdvertisement;
+import kodlamaio.hrms.entities.dtos.JobAdvertisementDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.stereotype.Service;
@@ -92,6 +93,17 @@ public class JobAdvertisementManger implements JobAdvertisementService {
             return new SuccessResult("Job advertisement is activated successfully.");
         }
         return new ErrorResult("There is no such job advertisement or it has been previously deleted.");
+
+    }
+
+    @Override
+    public DataResult<List<JobAdvertisementDto>> getJobAdvertisementsIsActive() {
+        return new SuccessDataResult<List<JobAdvertisementDto>>(this.jobAdvertisementDao.getJobAdvertisementsDtoIsActive());
+    }
+
+    @Override
+    public DataResult<List<JobAdvertisementDto>> getJobAdvertisementsDtoIsActiveByCompanyName(String companyName) {
+        return new SuccessDataResult<List<JobAdvertisementDto>>(this.jobAdvertisementDao.getJobAdvertisementsDtoIsActiveByCompanyName(companyName));
 
     }
 }

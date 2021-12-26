@@ -5,6 +5,7 @@ import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.entities.concretes.JobAdvertisement;
+import kodlamaio.hrms.entities.dtos.JobAdvertisementDto;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ public interface JobAdvertisementService {
     Result getById(int id);
     Result setDeactivateJobAdvertisement(int id);
     Result setActivateJobAdvertisement(int id);
+    DataResult<List<JobAdvertisementDto>> getJobAdvertisementsIsActive();
+    DataResult<List<JobAdvertisementDto>> getJobAdvertisementsDtoIsActiveByCompanyName(String companyName);
 
 
 

@@ -28,7 +28,8 @@ public class EmployersController {
 
     @PostMapping("/add")
     public Result add(@RequestBody Employer employer){
-        return this.employerService.add(employer);
+        String repeatPassword = "Parola.123";
+        return this.employerService.add(employer,repeatPassword);
     }
 
 
